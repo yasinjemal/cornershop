@@ -1,0 +1,115 @@
+// ============================================
+// Blacksteel - Prisma Schema
+// Wholesale + Retail E-Commerce System
+// ============================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────
+
+/// User roles: RETAIL (individual buyers), WHOLESALE (bulk buyers), ADMIN (system managers)
+enum Role {
+  RETAIL
+  WHOLESALE
+  ADMIN
+}
+
+// ─── Models ──────────────────────────────────
+
+/// Product categories for organization and navigation
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String   @default("")
+  imageUrl    String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  products Product[] // Products in this category
+
+  @@map("categories")
+}
+
+/// Registered users of the platform
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(RETAIL)
+  createdAt DateTime @default(now())
+
+  orders Order[] // A user can have many orders
+
+  @@map("users")
+}
+
+/// Products available in the catalog
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique @default("")
+  description String
+  basePrice   Float
+  imageUrl    String
+  images      String[] @default([])
+  stock       Int      @default(0)
+  sku         String   @default("")
+  featured    Boolean  @default(false)
+  categoryId  String?
+  createdAt   DateTime @default(now())
+
+  category     Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  pricingTiers PricingTier[] // Tiered pricing for wholesale quantities
+  orderItems   OrderItem[]   // Products that appear in orders
+
+  @@map("products")
+}
+
+/// Quantity-based pricing tiers (for wholesale/reseller discounts)
+/// Example: Buy 10+ → R599 each, Buy 50+ → R499 each
+model PricingTier {
+  id           String @id @default(cuid())
+  productId    String
+  minQty       Int
+  pricePerUnit Float
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("pricing_tiers")
+}
+
+/// Customer orders
+model Order {
+  id          String   @id @default(cuid())
+  userId      String
+  totalAmount Float
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  user  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items OrderItem[] // Line items in this order
+
+  @@map("orders")
+}
+
+/// Individual items within an order
+model OrderItem {
+  id              String @id @default(cuid())
+  orderId         String
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("order_items")
+}

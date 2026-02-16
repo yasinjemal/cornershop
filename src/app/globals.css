@@ -1,0 +1,225 @@
+@import "tailwindcss";
+
+/* ============================================
+   Blacksteel — Premium Men's Fashion Brand
+   Design System v3.0 — "Commanding Aspiration"
+   
+   Font system: Playfair Display (headlines) + DM Sans (body)
+   Color philosophy: Cooled neutrals, gold accent, no terracotta
+   Animation: Reduced, intentional, Apple-level
+   ============================================ */
+
+:root {
+  /* Brand Foundations — cooled temperature */
+  --background: #F7F7F8;
+  --foreground: #0F1114;
+  --primary: #1A1D23;
+  --primary-light: #262930;
+  
+  /* Luxury Accent — architectural gold */
+  --secondary: #C4A265;
+  --secondary-hover: #B39358;
+  --secondary-muted: rgba(196, 162, 101, 0.10);
+  
+  /* CTA — primary dark on light, gold on dark */
+  --cta: #1A1D23;
+  --cta-hover: #262930;
+  --cta-light: rgba(26, 29, 35, 0.06);
+  
+  /* Surfaces */
+  --surface: #FFFFFF;
+  --surface-alt: #F3F3F5;
+  --surface-dark: #1A1D23;
+  
+  /* Borders — Apple-precision */
+  --border: #E5E5EA;
+  --border-hover: #D1D1D6;
+  
+  /* Text Hierarchy */
+  --text-body: #3D4048;
+  --muted: #6B7080;
+  --muted-light: #9CA3AF;
+  
+  /* Trust & Status — used sparingly */
+  --trust: #1B6B4A;
+  --trust-light: #ECFDF5;
+  --danger: #DC2626;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-muted: var(--secondary-muted);
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-light: var(--cta-light);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-surface-dark: var(--surface-dark);
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-text-body: var(--text-body);
+  --color-muted: var(--muted);
+  --color-muted-light: var(--muted-light);
+  --color-trust: var(--trust);
+  --color-trust-light: var(--trust-light);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--text-body);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display font utility */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar — minimal */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-light);
+}
+
+/* Selection — gold tint */
+::selection {
+  background: var(--secondary-muted);
+  color: var(--primary);
+}
+
+/* ===== ANIMATIONS — reduced, intentional ===== */
+
+/* Toast entrance */
+@keyframes slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Content reveal */
+@keyframes slide-in-up {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-slide-in-up {
+  animation: slide-in-up 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Mobile drawer */
+@keyframes slide-in-left {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Fade-in — subtle, fast */
+@keyframes fade-in-up {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Cart badge — subtle pulse */
+@keyframes cart-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.animate-cart-bounce {
+  animation: cart-pulse 0.25s ease;
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-alt) 25%, var(--border) 50%, var(--surface-alt) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* Card hover lift — subtle */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -8px rgba(15, 17, 20, 0.10);
+}
+
+/* Image zoom on hover */
+.img-zoom {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.img-zoom:hover {
+  transform: scale(1.04);
+}
+
+/* Button press state */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Link underline draw — left to right */
+.link-draw {
+  position: relative;
+}
+.link-draw::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--secondary);
+  transition: width 0.2s ease;
+}
+.link-draw:hover::after {
+  width: 100%;
+}
+
+/* Image fade-in on load */
+.img-reveal {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.img-reveal.loaded {
+  opacity: 1;
+}
+
+/* Photo consistency filter */
+.product-photo {
+  filter: contrast(1.03) saturate(0.92);
+}
