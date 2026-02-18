@@ -26,7 +26,7 @@ export async function GET() {
   }
 }
 
-// POST /api/orders — place an order
+// POST /api/orders — place an order (with stock validation)
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -42,28 +42,68 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate stock availability for all items
+    const productIds = items.map((i) => i.productId);
+    const products = await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, name: true, stock: true },
+    });
+
+    const productMap = new Map(products.map((p) => [p.id, p]));
+
+    for (const item of items) {
+      const product = productMap.get(item.productId);
+      if (!product) {
+        return NextResponse.json(
+          { success: false, error: `Product not found: ${item.productId}` },
+          { status: 400 }
+        );
+      }
+      if (product.stock < item.quantity) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Insufficient stock for "${product.name}". Available: ${product.stock}, requested: ${item.quantity}`,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     const totalAmount = items.reduce(
       (sum, item) => sum + item.quantity * item.priceAtPurchase,
       0
     );
 
-    const order = await prisma.order.create({
-      data: {
-        userId,
-        totalAmount,
-        status: "PENDING",
-        items: {
-          create: items.map((item) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            priceAtPurchase: item.priceAtPurchase,
-          })),
+    // Create order and decrement stock in a transaction
+    const order = await prisma.$transaction(async (tx) => {
+      // Decrement stock for each item
+      for (const item of items) {
+        await tx.product.update({
+          where: { id: item.productId },
+          data: { stock: { decrement: item.quantity } },
+        });
+      }
+
+      // Create the order
+      return tx.order.create({
+        data: {
+          userId,
+          totalAmount,
+          status: "PENDING",
+          items: {
+            create: items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+              priceAtPurchase: item.priceAtPurchase,
+            })),
+          },
         },
-      },
-      include: {
-        user: true,
-        items: { include: { product: true } },
-      },
+        include: {
+          user: true,
+          items: { include: { product: true } },
+        },
+      });
     });
 
     return NextResponse.json({ success: true, data: order }, { status: 201 });

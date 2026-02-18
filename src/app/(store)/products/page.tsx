@@ -2,12 +2,18 @@
 // Product Catalog — server-rendered product grid
 // ============================================
 
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import ProductCard from "@/components/store/ProductCard";
 import ProductFilters from "@/components/store/ProductFilters";
 import EmptyState from "@/components/ui/EmptyState";
 import type { ProductWithTiers } from "@/types";
 import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Collection",
+  description: "Browse our full collection of premium men's suits, shirts, trousers, shoes, and accessories.",
+};
 
 type Props = {
   searchParams: Promise<{ search?: string; sort?: string; category?: string }>;

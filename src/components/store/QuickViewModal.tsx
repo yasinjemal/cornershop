@@ -6,6 +6,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/lib/cart";
 import { useToast } from "@/lib/toast";
 import { formatCurrency, calculateTieredPrice } from "@/lib/utils";
@@ -66,9 +67,9 @@ export default function QuickViewModal({
 
         <div className="grid md:grid-cols-2">
           {/* Image */}
-          <div className="flex items-center justify-center bg-surface-alt p-8 aspect-square overflow-hidden">
+          <div className="relative flex items-center justify-center bg-surface-alt p-8 aspect-square overflow-hidden">
             {product.imageUrl ? (
-              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+              <Image src={product.imageUrl} alt={product.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             ) : (
               <svg className="w-20 h-20 text-muted-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />

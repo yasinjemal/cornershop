@@ -143,12 +143,12 @@ export default async function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
             <div className="max-w-lg">
-              <p className="text-[11px] font-medium text-secondary uppercase tracking-[0.15em] mb-3">About Blacksteel</p>
+              <p className="text-[11px] font-medium text-secondary uppercase tracking-[0.15em] mb-3">About Mens Corner</p>
               <h2 className="font-display text-3xl sm:text-4xl font-semibold text-primary leading-tight">
                 Premium men&apos;s fashion designed in Johannesburg, built for everywhere.
               </h2>
               <p className="mt-6 text-muted leading-relaxed">
-                Every Blacksteel garment is crafted from carefully selected fabrics, designed
+                Every Mens Corner garment is crafted from carefully selected fabrics, designed
                 for the modern man who refuses to compromise between style and value.
               </p>
             </div>
@@ -183,7 +183,7 @@ export default async function Home() {
           <div className="max-w-2xl mx-auto text-center">
             <p className="text-[11px] font-medium text-secondary uppercase tracking-[0.15em] mb-3">For Retailers & Boutiques</p>
             <h2 className="font-display text-3xl sm:text-4xl font-semibold text-white leading-tight">
-              Partner With Blacksteel
+              Partner With Mens Corner
             </h2>
             <p className="mt-5 text-base text-gray-400 max-w-lg mx-auto leading-relaxed">
               Stock premium men&apos;s fashion at wholesale pricing. Volume discounts for qualified businesses — the more you order, the more you save.

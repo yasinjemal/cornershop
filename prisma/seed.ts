@@ -1,6 +1,6 @@
 // ============================================
 // Prisma seed script — populates database with sample data
-// Blacksteel — Premium Fashion Brand (South Africa)
+// Mens Corner — Premium Fashion Brand (South Africa)
 // ============================================
 // Run with: npx prisma db seed
 
@@ -93,7 +93,7 @@ async function main() {
 
   // ─── Users ──────────────────────────────────────
   const adminUser = await prisma.user.create({
-    data: { name: "Admin", email: "admin@blacksteel.co.za", role: Role.ADMIN },
+    data: { name: "Admin", email: "admin@menscorner.co.za", role: Role.ADMIN },
   });
 
   const retailUser = await prisma.user.create({

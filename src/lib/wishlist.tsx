@@ -32,7 +32,7 @@ export function useWishlist() {
   return ctx;
 }
 
-const STORAGE_KEY = "blacksteel_wishlist";
+const STORAGE_KEY = "menscorner_wishlist";
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<string[]>([]);

@@ -71,7 +71,7 @@ export default function AdminSidebar() {
               BS
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-semibold truncate">Blacksteel</p>
+              <p className="text-sm font-semibold truncate">Mens Corner</p>
               <p className="text-[10px] text-white/40 uppercase tracking-wider">Admin Panel</p>
             </div>
           </div>

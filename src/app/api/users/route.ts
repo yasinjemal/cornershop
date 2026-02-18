@@ -5,9 +5,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// GET /api/users
-export async function GET() {
+// GET /api/users?email=xxx — find by email (single), or list all (admin)
+export async function GET(req: NextRequest) {
   try {
+    const { searchParams } = new URL(req.url);
+    const email = searchParams.get("email");
+
+    // Secure single-user lookup by email (for checkout)
+    if (email) {
+      const user = await prisma.user.findUnique({
+        where: { email },
+        select: { id: true, name: true, email: true, role: true },
+      });
+      if (!user) {
+        return NextResponse.json({ success: true, data: null });
+      }
+      return NextResponse.json({ success: true, data: user });
+    }
+
+    // Full user list (admin use only)
     const users = await prisma.user.findMany({
       include: { _count: { select: { orders: true } } },
       orderBy: { createdAt: "desc" },

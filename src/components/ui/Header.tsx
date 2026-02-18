@@ -38,8 +38,8 @@ export default function Header() {
 
           {/* Logo — serif display */}
           <Link href="/" className="text-xl font-bold tracking-tight font-display">
-            <span className="text-primary">BLACK</span>
-            <span className="text-secondary">STEEL</span>
+            <span className="text-primary">MENS</span>
+            <span className="text-secondary"> CORNER</span>
           </Link>
 
           {/* Desktop nav — link-draw hover */}
@@ -105,8 +105,8 @@ export default function Header() {
             {/* Drawer header */}
             <div className="flex items-center justify-between px-5 h-16 border-b border-border">
               <Link href="/" className="text-lg font-bold tracking-tight font-display" onClick={() => setMobileOpen(false)}>
-                <span className="text-primary">BLACK</span>
-                <span className="text-secondary">STEEL</span>
+                <span className="text-primary">MENS</span>
+                <span className="text-secondary"> CORNER</span>
               </Link>
               <button onClick={() => setMobileOpen(false)} className="p-2 text-muted hover:text-primary transition-colors">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>

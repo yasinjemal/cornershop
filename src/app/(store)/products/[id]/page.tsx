@@ -1,12 +1,15 @@
 // ============================================
 // Product Detail Page — server-rendered
+// SEO: generateMetadata + JSON-LD structured data
 // ============================================
 
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { formatCurrency } from "@/lib/utils";
 import type { ProductWithTiers } from "@/types";
+import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ProductDetailClient from "./ProductDetailClient";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
 import RelatedProducts from "@/components/store/RelatedProducts";
@@ -14,6 +17,33 @@ import RelatedProducts from "@/components/store/RelatedProducts";
 type Props = {
   params: Promise<{ id: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const product = await prisma.product.findUnique({
+    where: { id },
+    select: { name: true, description: true, imageUrl: true, basePrice: true },
+  });
+
+  if (!product) return { title: "Product Not Found" };
+
+  return {
+    title: product.name,
+    description: product.description?.slice(0, 160) || `Shop ${product.name} at Mens Corner.`,
+    openGraph: {
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: product.imageUrl ? [{ url: product.imageUrl, width: 800, height: 800, alt: product.name }] : [],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.name,
+      description: product.description?.slice(0, 160),
+      images: product.imageUrl ? [product.imageUrl] : [],
+    },
+  };
+}
 
 export default async function ProductDetailPage({ params }: Props) {
   const { id } = await params;
@@ -67,16 +97,41 @@ export default async function ProductDetailPage({ params }: Props) {
     { label: product.name },
   ];
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://menscorner.co.za";
+
+  // JSON-LD structured data for rich search results
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    description: product.description,
+    image: product.imageUrl || undefined,
+    url: `${siteUrl}/products/${product.id}`,
+    brand: { "@type": "Brand", name: "Mens Corner" },
+    offers: {
+      "@type": "Offer",
+      price: product.basePrice,
+      priceCurrency: "ZAR",
+      availability: product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      seller: { "@type": "Organization", name: "Mens Corner" },
+    },
+    ...(product.category && { category: product.category.name }),
+  };
+
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Breadcrumbs items={breadcrumbs} />
 
       <div className="grid gap-10 lg:grid-cols-[1fr,0.8fr] mt-6">
         {/* Image Gallery */}
         <div className="space-y-3">
-          <div className="flex items-center justify-center border border-border bg-surface-alt aspect-square overflow-hidden">
+          <div className="relative flex items-center justify-center border border-border bg-surface-alt aspect-square overflow-hidden">
             {product.imageUrl ? (
-              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover product-photo" />
+              <Image src={product.imageUrl} alt={product.name} fill sizes="(max-width: 1024px) 100vw, 55vw" className="object-cover product-photo" priority />
             ) : (
               <svg className="w-20 h-20 text-muted-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />
@@ -91,10 +146,10 @@ export default async function ProductDetailPage({ params }: Props) {
             ).slice(0, 4).map((img, i) => (
               <div
                 key={i}
-                className={`flex items-center justify-center border bg-surface-alt w-16 h-16 cursor-pointer transition overflow-hidden hover:border-secondary ${i === 0 ? "border-primary" : "border-border"}`}
+                className={`relative flex items-center justify-center border bg-surface-alt w-16 h-16 cursor-pointer transition overflow-hidden hover:border-secondary ${i === 0 ? "border-primary" : "border-border"}`}
               >
                 {img ? (
-                  <img src={img} alt="" className="w-full h-full object-cover product-photo" />
+                  <Image src={img} alt="" fill sizes="64px" className="object-cover product-photo" />
                 ) : (
                   <svg className="w-5 h-5 text-muted-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5A2.25 2.25 0 0022.5 18.75V5.25A2.25 2.25 0 0020.25 3H3.75A2.25 2.25 0 001.5 5.25v13.5A2.25 2.25 0 003.75 21z" />

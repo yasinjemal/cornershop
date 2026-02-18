@@ -14,8 +14,8 @@ export default function Footer() {
           {/* Brand + Contact */}
           <div>
             <Link href="/" className="text-xl font-bold tracking-tight font-display">
-              <span className="text-white">BLACK</span>
-              <span className="text-secondary">STEEL</span>
+              <span className="text-white">MENS</span>
+              <span className="text-secondary"> CORNER</span>
             </Link>
             <p className="mt-4 text-sm leading-relaxed max-w-xs">
               Premium men&apos;s fashion for the modern South African man.
@@ -26,7 +26,7 @@ export default function Footer() {
                 <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
-                info@blacksteel.co.za
+                info@menscorner.co.za
               </li>
               <li className="flex items-center gap-2">
                 <svg className="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
@@ -76,7 +76,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-14 border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <p>&copy; {new Date().getFullYear()} {APP_NAME}. All rights reserved.</p>
-          <p>Premium Men&apos;s Fashion — South Africa</p>
+          <div className="flex items-center gap-4">
+            <Link href="/privacy-policy" className="hover:text-secondary transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-secondary transition-colors">Terms & Conditions</Link>
+            <Link href="/returns" className="hover:text-secondary transition-colors">Returns</Link>
+          </div>
         </div>
       </div>
     </footer>

@@ -2,9 +2,15 @@
 // Categories Page — browse by product category
 // ============================================
 
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Breadcrumbs from "@/components/ui/Breadcrumbs";
+
+export const metadata: Metadata = {
+  title: "Categories",
+  description: "Shop by category — suits, shirts, trousers, shoes, accessories, and more.",
+};
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({

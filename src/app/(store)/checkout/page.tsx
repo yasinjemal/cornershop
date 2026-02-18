@@ -1,7 +1,7 @@
 "use client";
 
 // ============================================
-// Checkout Page — basic order placement
+// Checkout Page — order placement with shipping
 // ============================================
 
 import { useState } from "react";
@@ -17,6 +17,11 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
+  const [postalCode, setPostalCode] = useState("");
   const [role, setRole] = useState<"RETAIL" | "WHOLESALE">("RETAIL");
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -67,18 +72,13 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      // 1. Find or create user
-      const userRes = await fetch("/api/users", { method: "GET" });
+      // 1. Find or create user (secure email lookup)
+      const userRes = await fetch(`/api/users?email=${encodeURIComponent(email)}`);
       const userData = await userRes.json();
       let userId: string | null = null;
 
-      if (userData.success) {
-        const existing = userData.data.find(
-          (u: { email: string }) => u.email === email
-        );
-        if (existing) {
-          userId = existing.id;
-        }
+      if (userData.success && userData.data) {
+        userId = userData.data.id;
       }
 
       // Create user if not exists (simplified — no auth)
@@ -143,6 +143,14 @@ export default function CheckoutPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
+          <Input
+            label="Phone Number"
+            type="tel"
+            placeholder="+27 xx xxx xxxx"
+            required
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
           <Select
             label="Account Type"
             value={role}
@@ -151,6 +159,51 @@ export default function CheckoutPage() {
               { value: "RETAIL", label: "Retail Customer" },
               { value: "WHOLESALE", label: "Wholesale Buyer" },
             ]}
+          />
+        </div>
+
+        {/* Shipping address */}
+        <div className="rounded-xl border border-border bg-white p-6 space-y-4 shadow-sm">
+          <h2 className="text-lg font-semibold">Shipping Address</h2>
+          <Input
+            label="Street Address"
+            placeholder="123 Main Road, Apt 4"
+            required
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label="City"
+              placeholder="Johannesburg"
+              required
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <Select
+              label="Province"
+              value={province}
+              onChange={(e) => setProvince(e.target.value)}
+              options={[
+                { value: "", label: "Select province" },
+                { value: "GP", label: "Gauteng" },
+                { value: "WC", label: "Western Cape" },
+                { value: "KZN", label: "KwaZulu-Natal" },
+                { value: "EC", label: "Eastern Cape" },
+                { value: "FS", label: "Free State" },
+                { value: "LP", label: "Limpopo" },
+                { value: "MP", label: "Mpumalanga" },
+                { value: "NW", label: "North West" },
+                { value: "NC", label: "Northern Cape" },
+              ]}
+            />
+          </div>
+          <Input
+            label="Postal Code"
+            placeholder="2000"
+            required
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
           />
         </div>
 

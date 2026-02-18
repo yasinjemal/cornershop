@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { ProductWithTiers } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 import { useWishlist } from "@/lib/wishlist";
@@ -50,10 +51,12 @@ export default function ProductCard({
         <Link href={`/products/${product.id}`} className="block overflow-hidden">
           <div className="relative aspect-[3/4] bg-surface-alt flex items-center justify-center">
             {product.imageUrl ? (
-              <img
+              <Image
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover img-zoom product-photo"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover img-zoom product-photo"
               />
             ) : (
               <div className="flex flex-col items-center gap-2 text-muted-light">

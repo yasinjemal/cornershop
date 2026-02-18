@@ -83,7 +83,7 @@ export default function AdminTopBar() {
           </div>
           <div className="hidden lg:block">
             <p className="text-sm font-medium text-gray-900 leading-tight">Admin</p>
-            <p className="text-[11px] text-gray-400 leading-tight">admin@blacksteel.co.za</p>
+            <p className="text-[11px] text-gray-400 leading-tight">admin@menscorner.co.za</p>
           </div>
         </div>
       </div>

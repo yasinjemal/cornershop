@@ -130,7 +130,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("blacksteel-cart");
+      const stored = localStorage.getItem("menscorner-cart");
       if (stored) {
         dispatch({ type: "LOAD_CART", payload: JSON.parse(stored) });
       }
@@ -140,7 +140,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Persist to localStorage on change
   useEffect(() => {
     try {
-      localStorage.setItem("blacksteel-cart", JSON.stringify(state.items));
+      localStorage.setItem("menscorner-cart", JSON.stringify(state.items));
     } catch {}
   }, [state.items]);
 

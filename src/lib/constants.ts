@@ -2,7 +2,7 @@
 // Application-wide constants
 // ============================================
 
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Blacksteel";
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Mens Corner";
 
 export const ORDER_STATUS = {
   PENDING: "PENDING",
